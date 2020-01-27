@@ -30,13 +30,18 @@ namespace coderush.Controllers.Api
         {
             List<Customer> Items = await _context.Customer.ToListAsync();
             int Count = Items.Count();
-            return Ok(new { Items, Count });
+            return Ok(Items);
         }
 
 
         [HttpPost("[action]")]
         public IActionResult Insert([FromBody]CrudViewModel<Customer> payload)
         {
+            if (payload.value.CustomerName == null)
+            {
+                throw new ArgumentNullException(null, "Customer name cannot be null");
+            }
+
             Customer customer = payload.value;
             _context.Customer.Add(customer);
             _context.SaveChanges();

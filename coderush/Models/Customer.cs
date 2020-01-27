@@ -8,12 +8,6 @@ namespace coderush.Models
 {
     public class Customer
     {
-
-        //public Customer(string customerName, string city)
-        //{
-        //    CustomerName = customerName;
-        //    City = city;
-        //}
         public int CustomerId { get; set; }
         [Required]
         public string CustomerName { get; set; }
