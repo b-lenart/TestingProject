@@ -30,7 +30,7 @@ namespace coderush.Controllers.Api
         {
             List<CashBank> Items = await _context.CashBank.ToListAsync();
             int Count = Items.Count();
-            return Ok(new { Items, Count });
+            return Ok(Items);
         }
 
         [HttpPost("[action]")]

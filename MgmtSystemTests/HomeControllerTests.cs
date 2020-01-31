@@ -12,16 +12,17 @@ namespace MgmtSystemTests
     [TestFixture]
     public class HomeControllerTests
     {
+        public HomeController homeController;
+
         [SetUp]
         public void Setup()
         {
+            homeController = new HomeController();
         }
 
         [Test]
         public void DoesReturnProperMessageInAbout()
         {
-            HomeController homeController = new HomeController();
-
             ViewResult result = homeController.About() as ViewResult;
 
             Assert.AreEqual("Your application description page.", result.ViewData["Message"]);
@@ -30,8 +31,6 @@ namespace MgmtSystemTests
         [Test]
         public void DoesReturnProperMessageInContact()
         {
-            HomeController homeController = new HomeController();
-
             ViewResult result = homeController.Contact() as ViewResult;
 
             Assert.AreEqual("Your contact page.", result.ViewData["Message"]);
@@ -40,7 +39,6 @@ namespace MgmtSystemTests
         [Test]
         public void HomeControllerTest()
         {
-            HomeController homeController = new HomeController();
             var result = homeController.Index();
             Assert.IsInstanceOf(typeof(RedirectToActionResult), result);
         }
@@ -48,9 +46,7 @@ namespace MgmtSystemTests
         [Test]
         public void HomeControllerErrorTest()
         {
-            HomeController homeController = new HomeController();
-            //var result = homeController.Error();
-            var result = homeController.Error() as ViewResult;
+            ViewResult result = homeController.Error() as ViewResult;
             Assert.IsInstanceOf(typeof(ErrorViewModel), result.Model);
         }
     }

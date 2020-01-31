@@ -42,25 +42,6 @@ namespace MgmtSystemTests
         [Test]
         public void AddNewCustomer()
         {
-            //var login = "super@admin.com";
-            //var password = "123456";
-            //_driver.Navigate().GoToUrl("https://localhost:44308/");
-            //var loginInput = _driver.FindElement(By.CssSelector(".login-box-body input#Email"));
-            //var passwordInput = _driver.FindElement(By.CssSelector(".login-box-body input#Password"));
-            //var loginButton = _driver.FindElement(By.CssSelector(".login-box-body button.btn.btn-primary.btn-block.btn-flat"));
-
-            //loginInput.Clear();
-            //loginInput.SendKeys(login);
-            //passwordInput.Clear();
-            //passwordInput.SendKeys(password);
-            //loginButton.Click();
-
-            //new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-            //    .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-            //    .ElementExists((By.CssSelector(".user-menu span.hidden-xs"))));
-
-            //_driver.Navigate().GoToUrl("https://localhost:44308/Customer/Index");
-
             new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector("a.e-addnewitem.e-toolbaricons.e-icon.e-addnew")));
@@ -70,7 +51,6 @@ namespace MgmtSystemTests
             var nameInput = _driver.FindElement(By.CssSelector("input#GridCustomerName"));
             var saveButton = _driver.FindElement(By.CssSelector("input#EditDialog_Grid_Save"));
 
-            //passwordInput.Clear();
             Random random = new Random();
             int randomNumber = random.Next(1000);
             nameInput.SendKeys("Customer" + randomNumber);
@@ -81,12 +61,6 @@ namespace MgmtSystemTests
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector("table.e-table tbody tr:first-child td:nth-child(2).e-selectionbackground")));
             var customerName = _driver.FindElement(By.CssSelector("table.e-table tbody tr:first-child td:nth-child(2).e-selectionbackground"));
-            //new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-            //    .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-            //    .TextToBePresentInElement(customerName, "Customer" + randomNumber));
-
-            //_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-            //new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
             StringAssert.Contains("Customer" + randomNumber, customerName.Text);
         }
 

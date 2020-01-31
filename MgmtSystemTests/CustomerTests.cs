@@ -44,28 +44,16 @@ namespace MgmtSystemTests
             var result = await controller.GetCustomer();
 
             Assert.IsType<OkObjectResult>(result);
-            //var objectResult = Assert.IsType<OkObjectResult>(result);
-
-            //Assert.IsAssignableFrom<List<Customer>>(objectResult.Value);
         }
 
         [Fact]
         public void GetCustomersProperAmount()
         {
             var controller = new CustomerController(_context);
-
-            //var result = await controller.GetCustomer();
             var okResult = controller.GetCustomer().Result as OkObjectResult;
 
             var items = Assert.IsType<List<Customer>>(okResult.Value);
-            //Assert.Equal(3, controller.GetCustomer().Items.Count());
-
             Assert.Equal(3, items.Count);
-
-            //Assert.Equal(3, customers.Count());
-            //var objectResult = Assert.IsType<OkObjectResult>(result);
-
-            //Assert.IsAssignableFrom<List<Customer>>(objectResult.Value);
         }
 
         [Fact]
@@ -89,18 +77,6 @@ namespace MgmtSystemTests
             var customerFromResponse = resultValue.Value as Customer;
 
             Assert.Equal(newCustomer.CustomerName, customerFromResponse.CustomerName);
-
-            //var okResult = controller.Insert().Result as OkObjectResult;
-
-            //var items = Assert.IsType<List<Customer>>(okResult.Value);
-            //Assert.Equal(3, controller.GetCustomer().Items.Count());
-
-            //Assert.Equal(3, items.Count);
-
-            //Assert.Equal(3, customers.Count());
-            //var objectResult = Assert.IsType<OkObjectResult>(result);
-
-            //Assert.IsAssignableFrom<List<Customer>>(objectResult.Value);
         }
 
         [Fact]
@@ -117,29 +93,27 @@ namespace MgmtSystemTests
                 value = newCustomer
             };
 
-            //var result = controller.Insert(crudView);
-            //Assert.IsType<OkObjectResult>(result);
-
-            //var resultValue = result as OkObjectResult;
-            //var customerFromResponse = resultValue.Value as Customer;
-
-            //Assert.Equal(newCustomer.CustomerName, customerFromResponse.CustomerName);
             var exception = Assert.Throws<ArgumentNullException>(() => controller.Insert(crudView));
-            //Assert.Throws<ArgumentNullException>(result);
-            Assert.IsType(typeof(ArgumentNullException), exception);
+            Assert.IsType<ArgumentNullException>(exception);
             Assert.Equal("Customer name cannot be null", exception.Message);
+        }
 
-            //var okResult = controller.Insert().Result as OkObjectResult;
+        [Fact]
+        public void UpdateInvalidCustomer()
+        {
+            var controller = new CustomerController(_context);
 
-            //var items = Assert.IsType<List<Customer>>(okResult.Value);
-            //Assert.Equal(3, controller.GetCustomer().Items.Count());
+            Customer newCustomer = new Customer() { CustomerId = 50, CustomerName = "John Invalid" };
+            CrudViewModel<Customer> crudView = new CrudViewModel<Customer>()
+            {
+                action = "update",
+                antiForgery = "",
+                key = 50,
+                value = newCustomer
+            };
 
-            //Assert.Equal(3, items.Count);
-
-            //Assert.Equal(3, customers.Count());
-            //var objectResult = Assert.IsType<OkObjectResult>(result);
-
-            //Assert.IsAssignableFrom<List<Customer>>(objectResult.Value);
+            var exception = Assert.Throws<DbUpdateConcurrencyException>(() => controller.Update(crudView));
+            Assert.IsType<DbUpdateConcurrencyException>(exception);
         }
 
         [Fact]

@@ -36,22 +36,14 @@ namespace MgmtSystemTests
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector(".user-menu span.hidden-xs")));
 
-            _driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
-
-            //var changePasswordLink = _driver.FindElement(By.XPath("//a[contains(@href, '/UserRole/ChangePassword')]"));
-            //new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-            //    .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-            //    .ElementExists(By.CssSelector(".sidebar-menu.tree li:nth-child(34) a")));
-            //var changePasswordLink = _driver.FindElement(By.CssSelector(".sidebar-menu.tree li:nth-child(34) a"));
-
-            //var changePasswordLink = element.FindElement(By.XPath("//a[contains(@href, '/UserRole/ChangePassword')]"));
-            //changePasswordLink.Click();
-
+            //_driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
         }
 
         [Test]
         public void ChangePasswordLinkGoesToProperUrl()
         {
+            _driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
+
             var changePasswordLink = _driver.FindElement(By.CssSelector(".sidebar-menu.tree li:nth-child(34)"));
             Assert.IsTrue(changePasswordLink.GetAttribute("class") == "active");
             StringAssert.StartsWith("https://localhost:44308/UserRole/ChangePassword", _driver.Url);
@@ -60,6 +52,8 @@ namespace MgmtSystemTests
         [Test]
         public void IsAlertVisibleAfterClickWithNoTabActive()
         {
+            _driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
+
             new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector("a.e-edititem.e-toolbaricons.e-icon.e-edit")));
@@ -67,7 +61,6 @@ namespace MgmtSystemTests
             var editButton = _driver.FindElement(By.CssSelector("a.e-edititem.e-toolbaricons.e-icon.e-edit"));
             editButton.Click();
 
-            //IAlert alert = driver.SwitchTo().Alert();
             System.Threading.Thread.Sleep(2000);
             var alert = _driver.SwitchTo().Alert();
             var alertText = alert.Text;
@@ -78,15 +71,12 @@ namespace MgmtSystemTests
         [Test]
         public void ChangePasswordProcess()
         {
-            //_driver.switchTo().alert()
-            //var login = "super@admin.com";
+            _driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
 
             new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector("a.e-edititem.e-toolbaricons.e-icon.e-edit")));
 
-            //var firstRow = _driver.FindElement(By.CssSelector("#Grid .e-gridcontent table.e-table tr.e-row"));
-            //var firstrowemail = _driver.FindElement(By.XPath("//tr[text() = 'super@admin.com']"));
             var firstrowemail = _driver.FindElement(By.XPath("//tr[contains(.,'" + login + "')]"));
             firstrowemail.Click();
 
@@ -100,7 +90,6 @@ namespace MgmtSystemTests
             var userNameInput = _driver.FindElement(By.CssSelector("input#Email"));
             var oldPassword = _driver.FindElement(By.CssSelector("input#OldPassword"));
             var saveButton = _driver.FindElement(By.CssSelector("input#EditDialog_Grid_Save"));
-            //StringAssert.Contains(firstCustomerName.Text, cutomerNameOnEditForm.GetAttribute("value"));
 
             saveButton.Click();
 
@@ -117,21 +106,27 @@ namespace MgmtSystemTests
             StringAssert.Contains("Password is required.", newPasswordValidationError.Text);
             StringAssert.Contains("Confirm Password is required.", retypePasswordValidationError.Text);
 
-            //var addButton = _driver.FindElement(By.CssSelector("a.e-addnewitem.e-toolbaricons.e-icon.e-addnew"));
-            //var nameInput = _driver.FindElement(By.CssSelector("input#GridCustomerName"));
-            //var saveButton = _driver.FindElement(By.CssSelector("input#EditDialog_Grid_Save"));
+            string password = "123456";
 
-            //Random random = new Random();
-            //int randomNumber = random.Next(1000);
-            //nameInput.SendKeys("Customer" + randomNumber);
+            var oldPasswordInput = _driver.FindElement(By.CssSelector("input#OldPassword"));
+            var newPasswordInput = _driver.FindElement(By.CssSelector("input#Password"));
+            var retypePasswordInput = _driver.FindElement(By.CssSelector("input#ConfirmPassword"));
 
-            //saveButton.Click();
+            oldPasswordInput.SendKeys(password);
+            newPasswordInput.SendKeys(password);
+            retypePasswordInput.SendKeys(password);
 
-            //new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
-            //    .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
-            //    .ElementExists(By.CssSelector("table.e-table tbody tr:first-child td:nth-child(2).e-selectionbackground")));
-            //var customerName = _driver.FindElement(By.CssSelector("table.e-table tbody tr:first-child td:nth-child(2).e-selectionbackground"));
-            //StringAssert.Contains("Customer" + randomNumber, customerName.Text);
+            saveButton.Click();
+
+            var topRightMailElement = _driver.FindElement(By.CssSelector("li.dropdown.user.user-menu a.dropdown-toggle"));
+            topRightMailElement.Click();
+            var signOutButton = _driver.FindElement(By.CssSelector("form#logoutForm div.pull-right button.btn.btn-default.btn-flat"));
+            signOutButton.Click();
+
+            StartBrowser();
+
+            var userMailElement = _driver.FindElement(By.CssSelector(".user-menu span.hidden-xs"));
+            StringAssert.Contains("super@admin.com", userMailElement.Text);
         }
 
         [TearDown]
