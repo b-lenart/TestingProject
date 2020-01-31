@@ -35,8 +35,6 @@ namespace MgmtSystemTests
             new WebDriverWait(_driver, TimeSpan.FromSeconds(10))
                 .Until(SeleniumExtras.WaitHelpers.ExpectedConditions
                 .ElementExists(By.CssSelector(".user-menu span.hidden-xs")));
-
-            //_driver.Navigate().GoToUrl("https://localhost:44308/UserRole/ChangePassword");
         }
 
         [Test]
@@ -88,7 +86,6 @@ namespace MgmtSystemTests
                 .ElementExists(By.CssSelector("input#Email")));
 
             var userNameInput = _driver.FindElement(By.CssSelector("input#Email"));
-            var oldPassword = _driver.FindElement(By.CssSelector("input#OldPassword"));
             var saveButton = _driver.FindElement(By.CssSelector("input#EditDialog_Grid_Save"));
 
             saveButton.Click();
@@ -127,6 +124,8 @@ namespace MgmtSystemTests
 
             var userMailElement = _driver.FindElement(By.CssSelector(".user-menu span.hidden-xs"));
             StringAssert.Contains("super@admin.com", userMailElement.Text);
+            Assert.IsTrue("https://localhost:44308/" == _driver.Url);
+
         }
 
         [TearDown]
